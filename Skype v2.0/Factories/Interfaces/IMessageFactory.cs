@@ -7,5 +7,7 @@
     internal interface IMessageFactory
     {
         IMessageViewModel MakeMessageViewModel(Message message);
+
+        IMessageClusterViewModel MakeMessageClusterViewModel(Message rootMessage);
     }
 }

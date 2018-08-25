@@ -16,5 +16,13 @@
 
             return messageViewModel;
         }
+
+        public IMessageClusterViewModel MakeMessageClusterViewModel(Message rootMessage)
+        {
+            IMessageClusterViewModel messageClusterViewModel = IoC.Get<IMessageClusterViewModel>();
+            messageClusterViewModel.Initialize(rootMessage);
+
+            return messageClusterViewModel;
+        }
     }
 }
