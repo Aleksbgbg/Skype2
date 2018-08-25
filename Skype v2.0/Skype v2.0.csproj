@@ -89,6 +89,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Factories\Interfaces\IMessageFactory.cs" />
+    <Compile Include="Factories\MessageFactory.cs" />
     <Compile Include="Services\Interfaces\IUserService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
@@ -178,7 +180,6 @@
     <Folder Include="Converters\" />
     <Folder Include="EventArgs\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Factories\Interfaces\" />
     <Folder Include="Helpers\" />
     <Folder Include="Images\" />
     <Folder Include="Models\" />

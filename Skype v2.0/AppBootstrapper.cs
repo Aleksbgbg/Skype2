@@ -6,6 +6,8 @@
 
     using Caliburn.Micro;
 
+    using Skype2.Factories;
+    using Skype2.Factories.Interfaces;
     using Skype2.Services;
     using Skype2.Services.Interfaces;
     using Skype2.ViewModels;
@@ -27,6 +29,9 @@
 
         protected override void Configure()
         {
+            // Register Factories
+            _container.Singleton<IMessageFactory, MessageFactory>();
+
             // Register Services
             _container.Singleton<IWindowManager, WindowManager>();
 
