@@ -14,7 +14,7 @@
         [JsonProperty("Id")]
         public long Id { get; }
 
-        [JsonProperty("Id")]
+        [JsonProperty("Name")]
         public string Name { get; }
     }
 }
