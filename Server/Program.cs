@@ -2,13 +2,13 @@
 {
     using System;
 
-    using Skype2.Server.Endpoints;
+    using Skype2.Server.Endpoints.Http;
 
     internal static class Program
     {
         private static void Main()
         {
-            using (RestEndpoint restEndpoint = new RestEndpoint())
+            using (HttpEndpoint httpEndpoint = new HttpEndpoint())
             {
                 Console.ReadKey();
             }

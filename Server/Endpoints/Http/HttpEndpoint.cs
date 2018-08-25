@@ -1,10 +1,10 @@
-﻿namespace Skype2.Server.Endpoints
+﻿namespace Skype2.Server.Endpoints.Http
 {
     using System;
 
-    internal class RestEndpoint : IDisposable
+    internal class HttpEndpoint : IDisposable
     {
-        ~RestEndpoint()
+        ~HttpEndpoint()
         {
             Dispose(false);
         }
