@@ -7,4 +7,5 @@
 			 xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
 			 mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance ViewModels:MainViewModel}">
+    <ContentControl Caliburn:View.Model="{Binding ChatViewModel, Mode=OneTime}"/>
 </UserControl>

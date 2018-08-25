@@ -2,5 +2,6 @@
 {
     internal interface IMainViewModel : IViewModelBase
     {
+        IChatViewModel ChatViewModel { get; }
     }
 }

@@ -4,5 +4,11 @@
 
     internal class MainViewModel : ViewModelBase, IMainViewModel
     {
+        public MainViewModel(IChatViewModel chatViewModel)
+        {
+            ChatViewModel = chatViewModel;
+        }
+
+        public IChatViewModel ChatViewModel { get; }
     }
 }
