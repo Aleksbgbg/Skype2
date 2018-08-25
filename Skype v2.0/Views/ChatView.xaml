@@ -6,4 +6,14 @@
 			 xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
 			 mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance ViewModels:ChatViewModel}">
+    <DockPanel>
+        <DockPanel Margin="10">
+            <!--<WpfToolkit:WatermarkTextBox DockPanel.Dock="Bottom" Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}" Watermark="Type a message here" TextWrapping="Wrap" VerticalContentAlignment="Center" AcceptsReturn="True" AcceptsTab="True" MinHeight="50" MaxHeight="150" MaxWidth="750" Margin="0, 5" Caliburn:Message.Attach="[Event PreviewKeyDown] = [Action MessageTextBox_PreviewKeyDown($eventArgs)]; [Event KeyUp] = [Action MessageTextBox_KeyUp($eventArgs)]"/>-->
+
+            <!--Helpers:AutoScrollBehaviour.AutoScroll="True"-->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" > 
+                <ItemsControl x:Name="MessageClusters" MaxWidth="750" Margin="5"/>
+            </ScrollViewer>
+        </DockPanel>
+    </DockPanel>
 </UserControl>
