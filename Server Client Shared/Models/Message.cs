@@ -2,8 +2,16 @@
 {
     using System;
 
+    using Newtonsoft.Json;
+
     public class Message
     {
+        [JsonConstructor]
+        public Message(ulong id, User sender, DateTime createdAt, string content) : this(sender, createdAt, content)
+        {
+            Id = id;
+        }
+
         public Message(User sender, DateTime createdAt, string content)
         {
             Sender = sender;
@@ -11,10 +19,16 @@
             Content = content;
         }
 
+        [JsonProperty("Id")]
+        public ulong? Id { get; }
+
+        [JsonProperty("User")]
         public User Sender { get; }
 
+        [JsonProperty("CreatedAt")]
         public DateTime CreatedAt { get; }
 
+        [JsonProperty("Content")]
         public string Content { get; }
     }
 }
