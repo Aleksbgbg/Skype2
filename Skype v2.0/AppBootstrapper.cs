@@ -37,6 +37,8 @@
             _container.Singleton<IMainViewModel, MainViewModel>();
 
             _container.Singleton<IChatViewModel, ChatViewModel>();
+
+            _container.PerRequest<IMessageViewModel, MessageViewModel>();
         }
 
         protected override object GetInstance(Type service, string key)
