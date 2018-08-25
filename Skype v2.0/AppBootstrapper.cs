@@ -6,6 +6,8 @@
 
     using Caliburn.Micro;
 
+    using Skype2.Services;
+    using Skype2.Services.Interfaces;
     using Skype2.ViewModels;
     using Skype2.ViewModels.Interfaces;
 
@@ -27,6 +29,8 @@
         {
             // Register Services
             _container.Singleton<IWindowManager, WindowManager>();
+
+            _container.Singleton<IUserService, UserService>();
 
             // Register ViewModels
             _container.Singleton<IShellViewModel, ShellViewModel>();

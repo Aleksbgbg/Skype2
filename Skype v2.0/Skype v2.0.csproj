@@ -85,6 +85,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Services\Interfaces\IUserService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IChatViewModel.cs" />
     <Compile Include="Views\ChatView.xaml.cs">
@@ -171,7 +173,6 @@
     <Folder Include="Helpers\" />
     <Folder Include="Images\" />
     <Folder Include="Models\" />
-    <Folder Include="Services\Interfaces\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
