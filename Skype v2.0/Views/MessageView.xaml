@@ -6,5 +6,5 @@
 			 xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
 			 mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance ViewModels:MessageViewModel}">
-    <TextBlock Text="{Binding Message.Content, Mode=OneTime}"/>
+    <TextBlock Text="{Binding Message.Content, Mode=OneTime}" TextAlignment="Left" Margin="10, 5"/>
 </UserControl>
