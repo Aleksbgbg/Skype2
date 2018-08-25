@@ -8,7 +8,7 @@
 
     internal class HttpEndpoint : IDisposable
     {
-        private readonly IDisposable _webStart = WebApp.Start<Startup>($"http://{Constants.ServerIp}:{Constants.HttpPort}");
+        private readonly IDisposable _webStart = WebApp.Start<Startup>($"http://localhost:{Constants.HttpPort}");
 
         ~HttpEndpoint()
         {
