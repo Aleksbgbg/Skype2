@@ -43,6 +43,7 @@
 
             _container.Singleton<IChatViewModel, ChatViewModel>();
 
+            _container.PerRequest<IMessageClusterViewModel, MessageClusterViewModel>();
             _container.PerRequest<IMessageViewModel, MessageViewModel>();
         }
 

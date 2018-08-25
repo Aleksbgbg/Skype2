@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="Skype2.Views.MessageClusterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
+			 mc:Ignorable="d"
+			 d:DataContext="{d:DesignInstance ViewModels:MessageClusterViewModel}">
+    <DockPanel Margin="0, 3.5">
+        <DockPanel.Style>
+            <Style TargetType="DockPanel">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding SelfIsSender, Mode=OneTime}" Value="True">
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding SelfIsSender, Mode=OneTime}" Value="False">
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </DockPanel.Style>
+
+        <Ellipse Height="30" Width="30" RenderOptions.BitmapScalingMode="HighQuality" Margin="0, 0, 10, 0">
+            <Ellipse.Style>
+                <Style TargetType="Ellipse">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelfIsSender, Mode=OneTime}" Value="True">
+                            <Setter Property="DockPanel.Dock" Value="Right"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding SelfIsSender, Mode=OneTime}" Value="False">
+                            <Setter Property="DockPanel.Dock" Value="Left"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Ellipse.Style>
+
+            <Ellipse.Fill>
+                <ImageBrush ImageSource="{Binding RootMessage.Message.Sender.Image, Mode=OneTime}"/>
+            </Ellipse.Fill>
+        </Ellipse>
+
+        <Path VerticalAlignment="Center">
+            <Path.Style>
+                <Style TargetType="Path">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelfIsSender, Mode=OneTime}" Value="True">
+                            <Setter Property="DockPanel.Dock" Value="Right"/>
+                            <Setter Property="Fill" Value="#C7EDFC"/>
+                            <Setter Property="Data" Value="M 0 0 L 0 8 L 5 3.75 Z"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding SelfIsSender, Mode=OneTime}" Value="False">
+                            <Setter Property="Fill" Value="LightGray"/>
+                            <Setter Property="Data" Value="M 0 0 L 0 8 L -5 3.75 Z"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Path.Style>
+        </Path>
+
+        <Border CornerRadius="2.5">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelfIsSender, Mode=OneTime}" Value="True">
+                            <Setter Property="Background" Value="#C7EDFC"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding SelfIsSender, Mode=OneTime}" Value="False">
+                            <Setter Property="Background" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <ItemsControl x:Name="AllMessages"/>
+        </Border>
+    </DockPanel>
+</UserControl>
