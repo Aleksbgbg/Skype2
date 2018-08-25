@@ -5,14 +5,14 @@
     public class User
     {
         [JsonConstructor]
-        public User(ulong id, string name)
+        public User(long id, string name)
         {
             Id = id;
             Name = name;
         }
 
         [JsonProperty("Id")]
-        public ulong Id { get; }
+        public long Id { get; }
 
         [JsonProperty("Id")]
         public string Name { get; }

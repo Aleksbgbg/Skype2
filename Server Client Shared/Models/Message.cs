@@ -7,7 +7,7 @@
     public class Message
     {
         [JsonConstructor]
-        public Message(ulong id, User sender, DateTime createdAt, string content) : this(sender, createdAt, content)
+        public Message(long id, User sender, DateTime createdAt, string content) : this(sender, createdAt, content)
         {
             Id = id;
         }
@@ -20,7 +20,7 @@
         }
 
         [JsonProperty("Id")]
-        public ulong? Id { get; }
+        public long? Id { get; }
 
         [JsonProperty("User")]
         public User Sender { get; }
