@@ -35,6 +35,7 @@
             // Register Services
             _container.Singleton<IWindowManager, WindowManager>();
 
+            _container.Singleton<IRestService, RestService>();
             _container.Singleton<IUserService, UserService>();
 
             // Register ViewModels
