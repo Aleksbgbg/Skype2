@@ -4,11 +4,8 @@
 
     using Newtonsoft.Json;
 
-    public class Message
+    public class Message : Snowflake
     {
-        [JsonProperty("Id")]
-        public long Id { get; set; }
-
         [JsonProperty("Content")]
         public string Content { get; set; }
 

@@ -4,11 +4,8 @@
 
     using Newtonsoft.Json;
 
-    public class User
+    public class User : Snowflake
     {
-        [JsonProperty("Id")]
-        public long Id { get; set; }
-
         [JsonProperty("Name")]
         public string Name { get; set; }
 
