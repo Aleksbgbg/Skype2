@@ -21,19 +21,20 @@
                 entity.ToTable("message");
 
                 entity.Property(e => e.Id)
-                      .HasColumnName("Id")
+                      .HasColumnName("id")
                       .HasDefaultValueSql("shard_1.id_generator()");
 
                 entity.Property(e => e.Content)
                       .IsRequired()
-                      .HasColumnName("Content");
+                      .HasColumnName("content");
 
                 entity.Property(e => e.CreatedAt)
-                      .HasColumnName("CreatedAt")
-                      .HasColumnType("timestamptz");
+                      .HasColumnName("created_at")
+                      .HasColumnType("timestamp with time zone")
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.Property(e => e.SenderId)
-                      .HasColumnName("SenderId")
+                      .HasColumnName("sender_id")
                       .HasDefaultValueSql("'1853920687798879245'::bigint");
 
                 entity.HasOne(d => d.Sender)
@@ -48,12 +49,12 @@
                 entity.ToTable("user");
 
                 entity.Property(e => e.Id)
-                      .HasColumnName("Id")
+                      .HasColumnName("id")
                       .HasDefaultValueSql("shard_1.id_generator()");
 
                 entity.Property(e => e.Name)
                       .IsRequired()
-                      .HasColumnName("Name")
+                      .HasColumnName("name")
                       .HasDefaultValueSql("'NewUser'::text");
             });
 
