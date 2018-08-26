@@ -6,29 +6,19 @@
 
     public class Message
     {
-        [JsonConstructor]
-        public Message(long id, User sender, DateTime createdAt, string content) : this(sender, createdAt, content)
-        {
-            Id = id;
-        }
-
-        public Message(User sender, DateTime createdAt, string content)
-        {
-            Sender = sender;
-            CreatedAt = createdAt;
-            Content = content;
-        }
-
         [JsonProperty("Id")]
-        public long? Id { get; }
-
-        [JsonProperty("User")]
-        public User Sender { get; }
-
-        [JsonProperty("CreatedAt")]
-        public DateTime CreatedAt { get; }
+        public long Id { get; set; }
 
         [JsonProperty("Content")]
-        public string Content { get; }
+        public string Content { get; set; }
+
+        [JsonProperty("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [JsonProperty("SenderId")]
+        public long SenderId { get; set; }
+
+        [JsonProperty("Sender")]
+        public User Sender { get; set; }
     }
 }

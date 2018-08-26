@@ -1,20 +1,18 @@
 ﻿namespace Shared.Models
 {
+    using System.Collections.Generic;
+
     using Newtonsoft.Json;
 
     public class User
     {
-        [JsonConstructor]
-        public User(long id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
-
         [JsonProperty("Id")]
-        public long Id { get; }
+        public long Id { get; set; }
 
         [JsonProperty("Name")]
-        public string Name { get; }
+        public string Name { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Message> Messages { get; } = new HashSet<Message>();
     }
 }
