@@ -3,10 +3,14 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
-			 mc:Ignorable="d"
+             xmlns:Converters="clr-namespace:Skype2.Converters"
+             xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
+             mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance ViewModels:MessageClusterViewModel}">
-    <DockPanel Margin="0, 3.5">
+    <DockPanel Width="{Binding ActualWidth, Mode=OneWay,
+        RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl},
+        Converter={x:Static Converters:WidthToPaddedWidthConverter.Default}}"
+               Margin="0, 3.5">
         <DockPanel.Style>
             <Style TargetType="DockPanel">
                 <Style.Triggers>
@@ -75,7 +79,7 @@
                 </Style>
             </Border.Style>
 
-            <ItemsControl x:Name="AllMessages"/>
+            <ItemsControl x:Name="AllMessages" Margin="0, 5"/>
         </Border>
     </DockPanel>
 </UserControl>
