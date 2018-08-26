@@ -24,7 +24,7 @@
         [HttpGet("get/all")]
         public ActionResult<IEnumerable<Message>> GetMessages()
         {
-            return _database.Messages.Include(message => message.Sender).ToArray();
+            return _database.Messages.Include(message => message.Sender).OrderBy(message => message.Id).ToArray();
         }
 
         [HttpGet("get/{id}")]
