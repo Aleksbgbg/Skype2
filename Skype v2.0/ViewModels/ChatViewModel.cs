@@ -15,14 +15,19 @@
     {
         private readonly IMessageFactory _messageFactory;
 
+        private readonly IMessageService _messageService;
+
         private readonly IRestService _restService;
 
-        public ChatViewModel(IMessageFactory messageFactory, IRestService restService)
+        public ChatViewModel(IMessageFactory messageFactory, IMessageService messageService, IRestService restService)
         {
             _messageFactory = messageFactory;
+            _messageService = messageService;
             _restService = restService;
 
             Task.Run(LoadMessages);
+
+            _messageService.MessageReceived += (sender, e) => AddMessage(e.Message);
         }
 
         public IObservableCollection<IMessageClusterViewModel> MessageClusters { get; } = new BindableCollection<IMessageClusterViewModel>();
