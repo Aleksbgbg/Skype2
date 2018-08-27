@@ -41,7 +41,9 @@
             </Ellipse.Style>
 
             <Ellipse.Fill>
-                <ImageBrush ImageSource="{Binding RootMessage.Message.Sender.Image, Mode=OneTime}"/>
+                <ImageBrush ImageSource="{Binding RootMessage.Message.Sender.ImageId, Mode=OneTime,
+                    Converter={x:Static Converters:ImageIdToImageSourceConverter.Default}}"
+                            Stretch="UniformToFill"/>
             </Ellipse.Fill>
         </Ellipse>
 
