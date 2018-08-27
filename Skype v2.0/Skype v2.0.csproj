@@ -114,6 +114,7 @@
     </Page>
     <Compile Include="Converters\ImageIdToImageSourceConverter.cs" />
     <Compile Include="Converters\WidthToPaddedWidthConverter.cs" />
+    <Compile Include="EventArgs\MessageReceivedEventArgs.cs" />
     <Compile Include="Factories\Interfaces\IMessageFactory.cs" />
     <Compile Include="Factories\MessageFactory.cs" />
     <Compile Include="Services\Interfaces\IRestService.cs" />
@@ -209,7 +210,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EventArgs\" />
     <Folder Include="Extensions\" />
     <Folder Include="Helpers\" />
     <Folder Include="Images\" />
