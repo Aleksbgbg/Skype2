@@ -6,6 +6,6 @@
 
     internal class UserService : IUserService
     {
-        public User LoggedInUser { get; } = new User(1853778537283060748, "Aleksbgbg");
+        public User LoggedInUser { get; } = new User { Id = 1853778537283060748, Name = "Aleksbgbg" };
     }
 }
