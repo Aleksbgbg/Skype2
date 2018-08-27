@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Windows.Input;
 
     using Caliburn.Micro;
 
@@ -31,6 +32,29 @@
         }
 
         public IObservableCollection<IMessageClusterViewModel> MessageClusters { get; } = new BindableCollection<IMessageClusterViewModel>();
+
+        private string _message;
+        public string Message
+        {
+            get => _message;
+
+            set
+            {
+                if (_message == value) return;
+
+                _message = value;
+                NotifyOfPropertyChange(() => Message);
+            }
+        }
+
+        public void KeyUp(KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Shift && Message != string.Empty)
+            {
+                _messageService.SendMessage(Message.TrimEnd());
+                Message = string.Empty;
+            }
+        }
 
         private async Task LoadMessages()
         {

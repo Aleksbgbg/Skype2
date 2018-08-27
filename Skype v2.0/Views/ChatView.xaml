@@ -3,12 +3,19 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
+             xmlns:Caliburn="http://www.caliburnproject.org"
+             xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
+             xmlns:WpfToolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
 			 mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance ViewModels:ChatViewModel}">
     <DockPanel>
         <DockPanel Margin="10">
-            <!--<WpfToolkit:WatermarkTextBox DockPanel.Dock="Bottom" Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}" Watermark="Type a message here" TextWrapping="Wrap" VerticalContentAlignment="Center" AcceptsReturn="True" AcceptsTab="True" MinHeight="50" MaxHeight="150" MaxWidth="750" Margin="0, 5" Caliburn:Message.Attach="[Event PreviewKeyDown] = [Action MessageTextBox_PreviewKeyDown($eventArgs)]; [Event KeyUp] = [Action MessageTextBox_KeyUp($eventArgs)]"/>-->
+            <WpfToolkit:WatermarkTextBox x:Name="Message" DockPanel.Dock="Bottom"
+                                         Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" Watermark="Type a message here"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True" AcceptsTab="True"
+                                         MinHeight="50" MaxHeight="150" MaxWidth="750" Margin="0, 5"
+                                         Caliburn:Message.Attach="[Event KeyUp] = [Action KeyUp($eventArgs)]"/>
 
             <!--Helpers:AutoScrollBehaviour.AutoScroll="True"-->
             <ScrollViewer VerticalScrollBarVisibility="Auto" > 
