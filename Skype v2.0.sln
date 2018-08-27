@@ -7,10 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skype v2.0", "Skype v2.0\Sk
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Server Client Shared", "Server Client Shared\Server Client Shared.shproj", "{953A7CC9-242E-4197-825E-BF3BB5BE1CA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTTP Server", "Skype v2.0 HTTP Server\HTTP Server.csproj", "{E8E8CAEF-C58B-4A41-BABA-B9EA5DE3AA29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HTTP Server", "Skype v2.0 HTTP Server\HTTP Server.csproj", "{E8E8CAEF-C58B-4A41-BABA-B9EA5DE3AA29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skype v2.0 TCP Server", "Skype v2.0 TCP Server\Skype v2.0 TCP Server.csproj", "{0B82DA5B-E0F3-46D8-B25A-90C53E55D02A}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Server Client Shared\Server Client Shared.projitems*{0b82da5b-e0f3-46d8-b25a-90c53e55d02a}*SharedItemsImports = 4
 		Server Client Shared\Server Client Shared.projitems*{953a7cc9-242e-4197-825e-bf3bb5be1ca4}*SharedItemsImports = 13
 		Server Client Shared\Server Client Shared.projitems*{a4b4e38d-f8f5-4df7-b22f-2c777a416be0}*SharedItemsImports = 4
 	EndGlobalSection
@@ -27,6 +30,10 @@ Global
 		{E8E8CAEF-C58B-4A41-BABA-B9EA5DE3AA29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8E8CAEF-C58B-4A41-BABA-B9EA5DE3AA29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8E8CAEF-C58B-4A41-BABA-B9EA5DE3AA29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B82DA5B-E0F3-46D8-B25A-90C53E55D02A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B82DA5B-E0F3-46D8-B25A-90C53E55D02A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B82DA5B-E0F3-46D8-B25A-90C53E55D02A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B82DA5B-E0F3-46D8-B25A-90C53E55D02A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
