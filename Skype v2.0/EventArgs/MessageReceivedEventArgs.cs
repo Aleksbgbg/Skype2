@@ -2,16 +2,15 @@
 {
     using System;
 
+    using Shared.Models;
+
     internal class MessageReceivedEventArgs : EventArgs
     {
-        public MessageReceivedEventArgs(byte[] data, string messageString)
+        public MessageReceivedEventArgs(Message message)
         {
-            Data = data;
-            MessageString = messageString;
+            Message = message;
         }
 
-        public byte[] Data { get; }
-
-        public string MessageString { get; }
+        public Message Message { get; }
     }
 }
