@@ -8,8 +8,6 @@
     {
         event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
-        void SendMessage(byte[] content);
-
         void SendMessage(string content);
     }
 }
