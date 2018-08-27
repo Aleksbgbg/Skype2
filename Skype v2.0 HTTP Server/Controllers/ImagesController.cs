@@ -69,9 +69,12 @@
             targetUser.ImageId = newUserImage.Id;
             await _databaseContext.SaveChangesAsync();
 
-            IOFile.Delete(GetImagePath(oldUserImage));
-            _databaseContext.UserImages.Remove(oldUserImage);
-            await _databaseContext.SaveChangesAsync();
+            if (_databaseContext.UserImages.First().Id != oldUserImage.Id)
+            {
+                IOFile.Delete(GetImagePath(oldUserImage));
+                _databaseContext.UserImages.Remove(oldUserImage);
+                await _databaseContext.SaveChangesAsync();
+            }
         }
 
         private string GetImagePath(UserImage userImage)
