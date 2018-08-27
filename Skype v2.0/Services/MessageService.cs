@@ -34,6 +34,7 @@
             {
                 Content = content,
                 CreatedAt = DateTime.Now,
+                Sender = _userService.LoggedInUser,
                 SenderId = _userService.LoggedInUser.Id
             }));
         }
