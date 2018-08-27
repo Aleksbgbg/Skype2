@@ -1,10 +1,14 @@
 ﻿namespace TcpServer
 {
+    using Newtonsoft.Json;
+
     using Shared.Config;
 
     using SimpleTCP;
 
     using static System.Console;
+
+    using Message = Shared.Models.Message;
 
     internal static class Program
     {
@@ -16,7 +20,7 @@
             {
                 tcpServer.Broadcast(e.Data);
 
-                WriteLine("Message: {0}", e.MessageString);
+                WriteLine("Message: {0}", JsonConvert.DeserializeObject<Message>(e.MessageString).Content);
             };
 
             ReadKey();
