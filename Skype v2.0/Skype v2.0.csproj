@@ -120,8 +120,10 @@
     <Compile Include="EventArgs\MessageReceivedEventArgs.cs" />
     <Compile Include="Factories\Interfaces\IMessageFactory.cs" />
     <Compile Include="Factories\MessageFactory.cs" />
+    <Compile Include="Services\Interfaces\IMessageService.cs" />
     <Compile Include="Services\Interfaces\IRestService.cs" />
     <Compile Include="Services\Interfaces\IUserService.cs" />
+    <Compile Include="Services\MessageService.cs" />
     <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
