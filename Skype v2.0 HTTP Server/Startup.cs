@@ -3,11 +3,13 @@
     using System.IO;
 
     using HttpServer.Database;
+    using HttpServer.Middlewares;
     using HttpServer.Services;
     using HttpServer.Services.Interfaces;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -30,6 +32,9 @@
             services.AddDbContext<Skype2Context>(options => options.UseNpgsql(File.ReadAllText("Connection String.txt")));
 
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddSingleton<IAuthorizationCache, AuthorizationCache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +44,8 @@
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<BasicAuthMiddleware>();
 
             app.UseMvc();
         }
