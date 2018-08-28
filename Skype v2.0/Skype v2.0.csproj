@@ -120,6 +120,7 @@
     <Compile Include="EventArgs\MessageReceivedEventArgs.cs" />
     <Compile Include="Factories\Interfaces\IMessageFactory.cs" />
     <Compile Include="Factories\MessageFactory.cs" />
+    <Compile Include="Helpers\AutoScrollBehavior.cs" />
     <Compile Include="Services\Interfaces\IMessageService.cs" />
     <Compile Include="Services\Interfaces\IRestService.cs" />
     <Compile Include="Services\Interfaces\IUserService.cs" />
@@ -216,7 +217,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
-    <Folder Include="Helpers\" />
     <Folder Include="Images\" />
     <Folder Include="Models\" />
     <Folder Include="Utilities\" />
