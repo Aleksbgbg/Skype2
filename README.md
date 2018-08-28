@@ -8,3 +8,6 @@ Skype v2.0 will have the following:
 - REST server endpoint using ASP.NET Core (C#), allowing messages to be POST-ed and retrieved (GET)
 - TCP socket server endpoint (C#), notifying clients of new messages
 - PostgreSQL database service, for storing messages
+
+## Skype2 Preview:
+![Skype2 Preview](Preview/Preview_1.png)
