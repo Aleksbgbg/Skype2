@@ -50,9 +50,17 @@
             {
                 entity.ToTable("user");
 
+                entity.HasIndex(e => e.Name)
+                      .HasName("unique_name")
+                      .IsUnique();
+
                 entity.Property(e => e.Id)
                       .HasColumnName("id")
                       .HasDefaultValueSql("shard_1.id_generator()");
+
+                entity.Property(e => e.CreatedAt)
+                      .HasColumnName("created_at")
+                      .HasColumnType("timestamp with time zone");
 
                 entity.Property(e => e.ImageId)
                       .HasColumnName("image_id")
@@ -62,6 +70,17 @@
                       .IsRequired()
                       .HasColumnName("name")
                       .HasDefaultValueSql("'NewUser'::text");
+
+                entity.Property(e => e.Password)
+                      .IsRequired()
+                      .HasColumnName("password")
+                      .HasColumnType("character(64)");
+
+                entity.Property(e => e.Salt)
+                      .IsRequired()
+                      .HasColumnName("salt")
+                      .HasColumnType("character(32)")
+                      .HasDefaultValueSql("'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'::bpchar");
 
                 entity.HasOne(d => d.Image)
                       .WithMany(p => p.AttachedUsers)
