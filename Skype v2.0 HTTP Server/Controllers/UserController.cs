@@ -10,6 +10,8 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
+    using Shared.Models;
+
     [ApiController]
     [Route("[Controller]")]
     public class UserController : ControllerBase
@@ -30,6 +32,12 @@
             ImageFileInfo imageFileInfo = _imageService.GetImage(_databaseContext.Users.Single(user => user.Id == userId).ImageId);
 
             return PhysicalFile(imageFileInfo.Path, imageFileInfo.ContentType);
+        }
+
+        [HttpGet("get/by/name/{name}")]
+        public ActionResult<User> GetUserByName(string name)
+        {
+            return _databaseContext.Users.Single(user => user.Name == name);
         }
 
         [HttpPost("{userId}/post/image")]
