@@ -15,7 +15,7 @@
         [JsonProperty("SenderId")]
         public long SenderId { get; set; }
 
-        [JsonProperty("Sender")]
+        [JsonIgnore]
         public User Sender { get; set; }
     }
 }
