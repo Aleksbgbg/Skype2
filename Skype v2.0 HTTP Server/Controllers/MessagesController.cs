@@ -30,7 +30,7 @@
         [HttpGet("get/{id}")]
         public ActionResult<Message> GetMessage(long id)
         {
-            return _database.Messages.FirstOrDefault(message => message.Id == id);
+            return _database.Messages.Single(message => message.Id == id);
         }
 
         [HttpPost("post")]

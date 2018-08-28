@@ -56,7 +56,7 @@
                 await image.CopyToAsync(fileStream);
             }
 
-            User targetUser = _databaseContext.Users.Include(user => user.Image).First(user => user.Id == userId);
+            User targetUser = _databaseContext.Users.Include(user => user.Image).Single(user => user.Id == userId);
 
             UserImage oldUserImage = targetUser.Image;
 
@@ -64,9 +64,7 @@
             targetUser.ImageId = newUserImage.Id;
             await _databaseContext.SaveChangesAsync();
 
-            if (_databaseContext.UserImages.First()
-                                .Id !=
-                oldUserImage.Id)
+            if (_databaseContext.UserImages.First().Id != oldUserImage.Id)
             {
                 File.Delete(GetImagePath(oldUserImage));
                 _databaseContext.UserImages.Remove(oldUserImage);
