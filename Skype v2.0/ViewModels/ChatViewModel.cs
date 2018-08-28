@@ -68,7 +68,7 @@
         {
             IMessageClusterViewModel lastMessageCluster = MessageClusters.LastOrDefault();
 
-            if (lastMessageCluster == null || lastMessageCluster.RootMessage.Message.Sender != message.Sender)
+            if (lastMessageCluster == null || lastMessageCluster.RootMessage.Message.SenderId != message.SenderId)
             {
                 MessageClusters.Add(_messageFactory.MakeMessageClusterViewModel(message));
             }
