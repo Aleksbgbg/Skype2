@@ -1,7 +1,9 @@
 ﻿namespace HttpServer.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using HttpServer.Database;
 
@@ -31,6 +33,13 @@
         public ActionResult<Message> GetMessage(long id)
         {
             return _database.Messages.Include(message => message.Sender).FirstOrDefault(message => message.Id == id);
+        }
+
+        [HttpPost("post")]
+        public async Task PostMessage([FromBody] Message message)
+        {
+            await _database.Messages.AddAsync(message);
+            await _database.SaveChangesAsync();
         }
     }
 }
