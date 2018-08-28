@@ -10,31 +10,31 @@
     using Shared.Config;
 
     [ValueConversion(typeof(long), typeof(ImageSource))]
-    internal class ImageIdToImageSourceConverter : IValueConverter
+    internal class UserIdToImageSourceConverter : IValueConverter
     {
         private readonly Dictionary<long, ImageSource> _imageCache = new Dictionary<long, ImageSource>();
 
-        public static ImageIdToImageSourceConverter Default { get; } = new ImageIdToImageSourceConverter();
+        public static UserIdToImageSourceConverter Default { get; } = new UserIdToImageSourceConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            long imageId = (long)value;
+            long userId = (long)value;
 
-            if (_imageCache.TryGetValue(imageId, out ImageSource cachedImage))
+            if (_imageCache.TryGetValue(userId, out ImageSource cachedImage))
             {
                 return cachedImage;
             }
 
-            ImageSource imageSource = new BitmapImage(new Uri($"http://{Constants.ServerIp}:{Constants.HttpPort}/images/get/{imageId}"));
+            ImageSource imageSource = new BitmapImage(new Uri($"http://{Constants.ServerIp}:{Constants.HttpPort}/user/{userId}/get/image"));
 
-            _imageCache[imageId] = imageSource;
+            _imageCache[userId] = imageSource;
 
             return imageSource;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException($"ConvertBack is not supported on {nameof(ImageIdToImageSourceConverter)}.");
+            throw new NotSupportedException($"ConvertBack is not supported on {nameof(UserIdToImageSourceConverter)}.");
         }
     }
 }

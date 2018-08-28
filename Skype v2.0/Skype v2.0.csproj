@@ -115,7 +115,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Converters\ImageIdToImageSourceConverter.cs" />
+    <Compile Include="Converters\UserIdToImageSourceConverter.cs" />
     <Compile Include="Converters\WidthToPaddedWidthConverter.cs" />
     <Compile Include="EventArgs\MessageReceivedEventArgs.cs" />
     <Compile Include="Factories\Interfaces\IMessageFactory.cs" />
