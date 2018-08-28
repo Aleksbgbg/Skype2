@@ -31,7 +31,7 @@
             RootMessage = _messageFactory.MakeMessageViewModel(rootMessage);
             AllMessages.Add(RootMessage);
 
-            SelfIsSender = _userService.LoggedInUser == rootMessage.Sender;
+            SelfIsSender = _userService.LoggedInUser.Id == rootMessage.SenderId;
         }
 
         public void AddMessage(Message message)
