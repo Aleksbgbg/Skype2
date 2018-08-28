@@ -1,5 +1,6 @@
 ﻿namespace Shared.Models
 {
+    using System;
     using System.Collections.Generic;
 
     using Newtonsoft.Json;
@@ -11,6 +12,15 @@
 
         [JsonProperty("ImageId")]
         public long ImageId { get; set; }
+
+        [JsonProperty("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [JsonIgnore]
+        public string Password { get; set; }
+
+        [JsonIgnore]
+        public string Salt { get; set; }
 
         [JsonIgnore]
         public UserImage Image { get; set; }
