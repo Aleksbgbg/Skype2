@@ -15,13 +15,13 @@
 
     internal class MessageService : IMessageService
     {
-        private readonly IUserService _userService;
+        private readonly ISessionService _sessionService;
 
         private readonly SimpleTcpClient _tcpClient = new SimpleTcpClient().Connect(Constants.ServerIp.ToString(), Constants.TcpPort);
 
-        public MessageService(IUserService userService)
+        public MessageService(ISessionService sessionService)
         {
-            _userService = userService;
+            _sessionService = sessionService;
 
             _tcpClient.DataReceived += (sender, e) => MessageReceived?.Invoke(this, new MessageReceivedEventArgs(JsonConvert.DeserializeObject<Message>(e.MessageString)));
         }
@@ -34,7 +34,7 @@
             {
                 Content = content,
                 CreatedAt = DateTime.Now,
-                SenderId = _userService.LoggedInUser.Id
+                SenderId = _sessionService.LoggedInUser.Id
             }));
         }
     }

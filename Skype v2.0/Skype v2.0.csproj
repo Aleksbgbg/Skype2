@@ -123,10 +123,10 @@
     <Compile Include="Helpers\AutoScrollBehavior.cs" />
     <Compile Include="Services\Interfaces\IMessageService.cs" />
     <Compile Include="Services\Interfaces\IRestService.cs" />
-    <Compile Include="Services\Interfaces\IUserService.cs" />
+    <Compile Include="Services\Interfaces\ISessionService.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Services\RestService.cs" />
-    <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\SessionService.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IChatViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMessageClusterViewModel.cs" />

@@ -12,12 +12,12 @@
     {
         private readonly IMessageFactory _messageFactory;
 
-        private readonly IUserService _userService;
+        private readonly ISessionService _sessionService;
 
-        public MessageClusterViewModel(IMessageFactory messageFactory, IUserService userService)
+        public MessageClusterViewModel(IMessageFactory messageFactory, ISessionService sessionService)
         {
             _messageFactory = messageFactory;
-            _userService = userService;
+            _sessionService = sessionService;
         }
 
         public IMessageViewModel RootMessage { get; private set; }
@@ -31,7 +31,7 @@
             RootMessage = _messageFactory.MakeMessageViewModel(rootMessage);
             AllMessages.Add(RootMessage);
 
-            SelfIsSender = _userService.LoggedInUser.Id == rootMessage.SenderId;
+            SelfIsSender = _sessionService.LoggedInUser.Id == rootMessage.SenderId;
         }
 
         public void AddMessage(Message message)

@@ -2,7 +2,7 @@
 {
     using Shared.Models;
 
-    internal interface IUserService
+    internal interface ISessionService
     {
         User LoggedInUser { get; }
     }
