@@ -25,7 +25,10 @@
             _messageFactory = messageFactory;
             _messageService = messageService;
             _restService = restService;
+        }
 
+        protected override void OnActivate()
+        {
             Task.Run(LoadMessages);
 
             _messageService.MessageReceived += (sender, e) => AddMessage(e.Message);
