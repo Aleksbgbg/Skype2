@@ -1,11 +1,13 @@
 ﻿<UserControl x:Class="Skype2.Views.LoginView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Caliburn="http://www.caliburnproject.org"
-			 xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
-			 mc:Ignorable="d"
+             xmlns:Helpers="clr-namespace:Skype2.Helpers"
+             xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
+             mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance ViewModels:LoginViewModel}">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock Text="Login" FontSize="32" FontWeight="Bold"/>
@@ -17,10 +19,14 @@
 
         <StackPanel Margin="0, 5">
             <TextBlock Text="Password:"/>
-            <PasswordBox x:Name="Password"/>
+            <PasswordBox>
+                <i:Interaction.Behaviors>
+                    <Helpers:PasswordExpositionBehavior Password="{Binding Password}"/>
+                </i:Interaction.Behaviors>
+            </PasswordBox>
         </StackPanel>
-        
+
         <Button Content="Login" Margin="0, 25, 0, 0"
-                Caliburn:Message.Attach="Login(username, password)"/>
+                Caliburn:Message.Attach="Login(username)"/>
     </StackPanel>
 </UserControl>

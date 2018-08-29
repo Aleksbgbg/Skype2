@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Security;
 
     using Caliburn.Micro;
 
@@ -19,9 +20,23 @@
 
         public event EventHandler LoggedIn;
 
-        public IEnumerable<IResult> Login(string username, string password)
+        private SecureString _password;
+        public SecureString Password
         {
-            yield return _restService.Login(username, password).AsResult();
+            get => _password;
+
+            set
+            {
+                if (_password == value) return;
+
+                _password = value;
+                NotifyOfPropertyChange(() => Password);
+            }
+        }
+
+        public IEnumerable<IResult> Login(string username)
+        {
+            yield return _restService.Login(username, Password).AsResult();
 
             LoggedIn?.Invoke(this, EventArgs.Empty);
         }
