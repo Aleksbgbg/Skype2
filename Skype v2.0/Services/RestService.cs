@@ -1,8 +1,9 @@
 ﻿namespace Skype2.Services
 {
     using System;
-    using System.Linq;
     using System.Net.Http;
+    using System.Runtime.InteropServices;
+    using System.Security;
     using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
@@ -27,14 +28,14 @@
 
         public User LoggedInUser { get; private set; }
 
-        public async Task Login(string username, string password)
+        public async Task Login(string username, SecureString password)
         {
             string passwordBase64Hashed;
 
             {
                 SHA256CryptoServiceProvider hasher = new SHA256CryptoServiceProvider();
 
-                byte[] hashBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(password));
+                byte[] hashBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(Marshal.PtrToStringBSTR(Marshal.SecureStringToBSTR(password))));
 
                 string hashString = BitConverter.ToString(hashBytes).Replace("-", "");
 
@@ -53,9 +54,9 @@
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
-            LoggedInUser = await Get<User>($"get/by/name/{username}");
-
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Token {responseContent}");
+
+            LoggedInUser = await Get<User>($"user/get/by/name/{username}");
         }
 
         public async Task Logout()

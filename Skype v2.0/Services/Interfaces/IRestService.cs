@@ -1,5 +1,6 @@
 ﻿namespace Skype2.Services.Interfaces
 {
+    using System.Security;
     using System.Threading.Tasks;
 
     using Shared.Models;
@@ -12,7 +13,7 @@
 
         Task<T> Get<T>(string path);
 
-        Task Login(string username, string password);
+        Task Login(string username, SecureString password);
 
         Task Logout();
     }
