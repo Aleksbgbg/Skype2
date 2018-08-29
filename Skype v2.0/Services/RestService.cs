@@ -25,7 +25,7 @@
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
         }
 
-        public User LoggedInUser { get; private set; } = new User { Id = 1853778537283060748, Name = "Aleksbgbg" };
+        public User LoggedInUser { get; private set; }
 
         public async Task Login(string username, string password)
         {
@@ -34,12 +34,11 @@
             {
                 SHA256CryptoServiceProvider hasher = new SHA256CryptoServiceProvider();
 
-                byte ignoreCharacter = (byte)'-';
-                byte[] hashBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(password))
-                                         .Where(byteValue => byteValue != ignoreCharacter)
-                                         .ToArray();
+                byte[] hashBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-                passwordBase64Hashed = Convert.ToBase64String(hashBytes);
+                string hashString = BitConverter.ToString(hashBytes).Replace("-", "");
+
+                passwordBase64Hashed = Convert.ToBase64String(Encoding.UTF8.GetBytes(hashString));
             }
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, GetUrl("session/login"))
