@@ -1,8 +1,6 @@
 ﻿namespace Skype2.ViewModels.Interfaces
 {
-    using Caliburn.Micro;
-
-    internal interface IShellViewModel : IViewModelBase, IConductor
+    internal interface IShellViewModel : IViewModelBase
     {
         IMainViewModel MainViewModel { get; }
     }
