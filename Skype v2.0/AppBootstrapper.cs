@@ -43,6 +43,8 @@
             _container.Singleton<IShellViewModel, ShellViewModel>();
             _container.Singleton<IMainViewModel, MainViewModel>();
 
+            _container.Singleton<ILoginViewModel, LoginViewModel>();
+
             _container.Singleton<IChatViewModel, ChatViewModel>();
 
             _container.PerRequest<IMessageClusterViewModel, MessageClusterViewModel>();
