@@ -125,6 +125,7 @@
     <Compile Include="Factories\Interfaces\IMessageFactory.cs" />
     <Compile Include="Factories\MessageFactory.cs" />
     <Compile Include="Helpers\AutoScrollBehavior.cs" />
+    <Compile Include="Helpers\PasswordExpositionBehavior.cs" />
     <Compile Include="Services\Interfaces\IMessageService.cs" />
     <Compile Include="Services\Interfaces\IRestService.cs" />
     <Compile Include="Services\Interfaces\ISessionService.cs" />
