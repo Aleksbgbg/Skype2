@@ -17,7 +17,7 @@
             _authService = authService;
         }
 
-        [HttpPost("login")]
+        [HttpGet("login")]
         public IActionResult Login([FromHeader] string authorization)
         {
             if (!authorization.StartsWith("Basic", StringComparison.InvariantCultureIgnoreCase))
@@ -35,14 +35,9 @@
             return Unauthorized();
         }
 
-        [HttpPost("logout")]
-        public IActionResult Logout(string authorization)
+        [HttpGet("logout")]
+        public IActionResult Logout([FromHeader] string authorization)
         {
-            if (!_authService.CheckAuthorized(authorization))
-            {
-                return BadRequest();
-            }
-
             _authService.DeAuthorize(authorization);
 
             return Ok();
