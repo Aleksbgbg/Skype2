@@ -20,6 +20,8 @@
 
         public event EventHandler LoggedIn;
 
+        public event EventHandler SwitchToRegisterRequested;
+
         private SecureString _password;
         public SecureString Password
         {
@@ -39,6 +41,11 @@
             yield return _restService.Login(username, Password).AsResult();
 
             LoggedIn?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SwitchToRegister()
+        {
+            SwitchToRegisterRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 }

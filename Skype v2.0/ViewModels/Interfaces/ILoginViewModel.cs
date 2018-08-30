@@ -5,5 +5,7 @@
     internal interface ILoginViewModel : IViewModelBase
     {
         event EventHandler LoggedIn;
+
+        event EventHandler SwitchToRegisterRequested;
     }
 }

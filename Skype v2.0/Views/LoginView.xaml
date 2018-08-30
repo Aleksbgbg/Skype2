@@ -28,5 +28,7 @@
 
         <Button Content="Login" Margin="0, 25, 0, 0"
                 Caliburn:Message.Attach="Login(username)"/>
+        
+        <Button Content="Go to Register" Caliburn:Message.Attach="SwitchToRegister"/>
     </StackPanel>
 </UserControl>
