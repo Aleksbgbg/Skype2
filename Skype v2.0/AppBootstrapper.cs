@@ -44,6 +44,7 @@
             _container.Singleton<IMainViewModel, MainViewModel>();
 
             _container.Singleton<ILoginViewModel, LoginViewModel>();
+            _container.Singleton<IRegisterViewModel, RegisterViewModel>();
 
             _container.Singleton<IChatViewModel, ChatViewModel>();
 
