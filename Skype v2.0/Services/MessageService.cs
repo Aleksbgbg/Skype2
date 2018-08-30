@@ -5,6 +5,7 @@
     using Newtonsoft.Json;
 
     using Shared.Config;
+    using Shared.Models;
 
     using SimpleTCP;
 
@@ -15,13 +16,13 @@
 
     internal class MessageService : IMessageService
     {
-        private readonly ISessionService _sessionService;
+        private readonly IRestService _restService;
 
         private readonly SimpleTcpClient _tcpClient = new SimpleTcpClient().Connect(Constants.ServerIp.ToString(), Constants.TcpPort);
 
-        public MessageService(ISessionService sessionService)
+        public MessageService(IRestService restService)
         {
-            _sessionService = sessionService;
+            _restService = restService;
 
             _tcpClient.DataReceived += (sender, e) => MessageReceived?.Invoke(this, new MessageReceivedEventArgs(JsonConvert.DeserializeObject<Message>(e.MessageString)));
         }
@@ -30,12 +31,13 @@
 
         public void SendMessage(string content)
         {
-            _tcpClient.Write(JsonConvert.SerializeObject(new Message
-            {
-                Content = content,
-                CreatedAt = DateTime.Now,
-                SenderId = _sessionService.LoggedInUser.Id
-            }));
+            _tcpClient.Write(JsonConvert.SerializeObject(new MessageTransmission($"Token {_restService.AuthToken}",
+                                                                                 new Message
+                                                                                 {
+                                                                                     Content = content,
+                                                                                     CreatedAt = DateTime.Now,
+                                                                                     SenderId = _restService.LoggedInUser.Id
+                                                                                 })));
         }
     }
 }
