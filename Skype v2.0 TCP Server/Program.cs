@@ -3,17 +3,15 @@
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
-    using System.Threading.Tasks;
 
     using Newtonsoft.Json;
 
     using Shared.Config;
+    using Shared.Models;
 
     using SimpleTCP;
 
     using static System.Console;
-
-    using Message = Shared.Models.Message;
 
     internal static class Program
     {
@@ -25,14 +23,27 @@
 
             tcpServer.DataReceived += async (sender, e) =>
             {
-                tcpServer.Broadcast(e.Data);
+                MessageTransmission messageTransmission = JsonConvert.DeserializeObject<MessageTransmission>(e.MessageString);
 
-                ByteArrayContent byteArrayContent = new ByteArrayContent(Encoding.UTF8.GetBytes(e.MessageString));
+                string messageString = JsonConvert.SerializeObject(messageTransmission.Message);
+
+                tcpServer.Broadcast(messageString);
+
+                ByteArrayContent byteArrayContent = new ByteArrayContent(Encoding.UTF8.GetBytes(messageString));
                 byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                await httpClient.PostAsync($"http://{Constants.ServerIp}:{Constants.HttpPort}/messages/post", byteArrayContent);
+                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"http://{Constants.ServerIp}:{Constants.HttpPort}/messages/post")
+                {
+                        Content = byteArrayContent,
+                        Headers =
+                        {
+                                { "authorization", messageTransmission.Authorization }
+                        }
+                };
 
-                WriteLine("Message: {0}", JsonConvert.DeserializeObject<Message>(e.MessageString).Content);
+                await httpClient.SendAsync(message);
+
+                WriteLine("Message: {0}", messageTransmission.Message.Content);
             };
 
             ReadKey();
