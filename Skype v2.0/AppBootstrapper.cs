@@ -37,7 +37,6 @@
 
             _container.Singleton<IMessageService, MessageService>();
             _container.Singleton<IRestService, RestService>();
-            _container.Singleton<ISessionService, SessionService>();
 
             // Register ViewModels
             _container.Singleton<IShellViewModel, ShellViewModel>();

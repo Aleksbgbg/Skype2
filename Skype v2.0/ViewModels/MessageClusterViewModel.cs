@@ -12,9 +12,9 @@
     {
         private readonly IMessageFactory _messageFactory;
 
-        private readonly ISessionService _sessionService;
+        private readonly IRestService _sessionService;
 
-        public MessageClusterViewModel(IMessageFactory messageFactory, ISessionService sessionService)
+        public MessageClusterViewModel(IMessageFactory messageFactory, IRestService sessionService)
         {
             _messageFactory = messageFactory;
             _sessionService = sessionService;
