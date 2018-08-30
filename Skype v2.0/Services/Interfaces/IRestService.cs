@@ -7,6 +7,8 @@
 
     internal interface IRestService
     {
+        string AuthToken { get; }
+
         User LoggedInUser { get; }
 
         Task<Message[]> GetMessages();
@@ -14,6 +16,8 @@
         Task<T> Get<T>(string path);
 
         Task Login(string username, SecureString password);
+
+        Task Register(string username, SecureString password);
 
         Task Logout();
     }
