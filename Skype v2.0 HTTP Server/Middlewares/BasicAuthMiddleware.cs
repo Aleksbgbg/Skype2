@@ -18,7 +18,7 @@
 
         public async Task Invoke(HttpContext context, IAuthService authService)
         {
-            if (context.Request.Path.StartsWithSegments("/session/login") || context.Request.Path.Value.Contains("/image"))
+            if (context.Request.Path.StartsWithSegments("/session/login") || context.Request.Path.StartsWithSegments("/session/register") || context.Request.Path.Value.Contains("/image"))
             {
                 await _next.Invoke(context);
                 return;
