@@ -49,6 +49,7 @@
         {
             await _databaseContext.Users.AddAsync(new User
             {
+                CreatedAt = DateTime.Now,
                 Name = username,
                 Password = Encoding.UTF8.GetString(Convert.FromBase64String(password))
             });
