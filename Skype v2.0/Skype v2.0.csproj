@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,6 +38,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
@@ -126,6 +128,7 @@
     <Compile Include="Converters\UserIdToImageSourceConverter.cs" />
     <Compile Include="Converters\WidthToPaddedWidthConverter.cs" />
     <Compile Include="EventArgs\MessageReceivedEventArgs.cs" />
+    <Compile Include="Extensions\SecureStringExtensions.cs" />
     <Compile Include="Factories\Interfaces\IMessageFactory.cs" />
     <Compile Include="Factories\MessageFactory.cs" />
     <Compile Include="Helpers\AutoScrollBehavior.cs" />
@@ -233,7 +236,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\" />
     <Folder Include="Images\" />
     <Folder Include="Models\" />
     <Folder Include="Utilities\" />
