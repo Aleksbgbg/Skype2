@@ -8,27 +8,29 @@
              xmlns:Helpers="clr-namespace:Skype2.Helpers"
              xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
              mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance ViewModels:LoginViewModel}">
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBlock Text="Login" FontSize="32" FontWeight="Bold"/>
+			 d:DataContext="{d:DesignInstance ViewModels:LoginViewModel}"
+             Style="{StaticResource UserControl.LoginRegistrationView}">
+    <Border Style="{StaticResource Border.LoginRegistrationContentHolder}">
+        <StackPanel Style="{StaticResource StackPanel.LoginRegistrationFormHolder}">
+            <TextBlock Text="Welcome back!" Style="{StaticResource TextBlock.LoginRegistrationHeader}"/>
 
-        <StackPanel Margin="0, 5">
-            <TextBlock Text="Username:"/>
+            <TextBlock Text="Username" Style="{StaticResource TextBlock.LoginRegistrationTextBoxLabel}"/>
             <TextBox x:Name="Username"/>
-        </StackPanel>
 
-        <StackPanel Margin="0, 5">
-            <TextBlock Text="Password:"/>
+            <TextBlock Text="Password" Style="{StaticResource TextBlock.LoginRegistrationTextBoxLabel}"/>
             <PasswordBox>
                 <i:Interaction.Behaviors>
                     <Helpers:PasswordExpositionBehavior Password="{Binding Password}"/>
                 </i:Interaction.Behaviors>
             </PasswordBox>
-        </StackPanel>
 
-        <Button Content="Login" Margin="0, 25, 0, 0"
-                Caliburn:Message.Attach="Login(username)"/>
-        
-        <Button Content="Go to Register" Caliburn:Message.Attach="SwitchToRegister"/>
-    </StackPanel>
+            <Button Content="Login"
+                    Style="{StaticResource Button.LoginRegistrationAction}"
+                    Caliburn:Message.Attach="Login(username)"/>
+
+            <Button Content="Register an account"
+                    Style="{StaticResource Button.LinkSwitchLoginRegistrationView}"
+                    Caliburn:Message.Attach="SwitchToRegister"/>
+        </StackPanel>
+    </Border>
 </UserControl>
