@@ -1,12 +1,11 @@
 ﻿namespace Skype2.ViewModels
 {
-    using System;
     using System.Collections.Generic;
-    using System.Runtime.InteropServices;
     using System.Security;
 
     using Caliburn.Micro;
 
+    using Skype2.Extensions;
     using Skype2.Services.Interfaces;
     using Skype2.ViewModels.Interfaces;
 
@@ -29,8 +28,8 @@
                 if (_username == value) return;
 
                 _username = value;
-                NotifyOfPropertyChange(() => CanRegister);
                 NotifyOfPropertyChange(() => Username);
+                NotifyOfPropertyChange(() => CanRegister);
             }
         }
 
@@ -44,8 +43,8 @@
                 if (_password == value) return;
 
                 _password = value;
-                NotifyOfPropertyChange(() => CanRegister);
                 NotifyOfPropertyChange(() => Password);
+                NotifyOfPropertyChange(() => CanRegister);
             }
         }
 
@@ -64,7 +63,7 @@
             }
         }
 
-        public bool CanRegister => !string.IsNullOrWhiteSpace(Username) && Password?.Length != 0 && RepeatPassword != null && Get(Password) == Get(RepeatPassword);
+        public bool CanRegister => !string.IsNullOrWhiteSpace(Username) && Password != null && RepeatPassword != null && Password.Length > 6 && Password.IsEqualTo(RepeatPassword);
 
         public IEnumerable<IResult> Register()
         {
@@ -76,11 +75,6 @@
         public void SwitchToLogin()
         {
             TryClose();
-        }
-
-        private static string Get(SecureString password)
-        {
-            return Marshal.PtrToStringBSTR(Marshal.SecureStringToBSTR(password));
         }
     }
 }
