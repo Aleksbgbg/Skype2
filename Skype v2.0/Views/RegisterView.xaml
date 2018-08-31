@@ -8,35 +8,36 @@
              xmlns:Helpers="clr-namespace:Skype2.Helpers"
              xmlns:ViewModels="clr-namespace:Skype2.ViewModels"
              mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance ViewModels:RegisterViewModel}">
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBlock Text="Register" FontSize="32" FontWeight="Bold"/>
+			 d:DataContext="{d:DesignInstance ViewModels:RegisterViewModel}"
+             Style="{StaticResource UserControl.LoginRegistrationView}">
+    <Border Style="{StaticResource Border.LoginRegistrationContentHolder}">
+        <StackPanel Style="{StaticResource StackPanel.LoginRegistrationFormHolder}">
+            <TextBlock Text="Create an account" Style="{StaticResource TextBlock.LoginRegistrationHeader}"/>
 
-        <StackPanel Margin="0, 5">
-            <TextBlock Text="Username:"/>
+            <TextBlock Text="Username" Style="{StaticResource TextBlock.LoginRegistrationTextBoxLabel}"/>
             <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
 
-        <StackPanel Margin="0, 5">
-            <TextBlock Text="Password:"/>
+            <TextBlock Text="Password" Style="{StaticResource TextBlock.LoginRegistrationTextBoxLabel}"/>
             <PasswordBox>
                 <i:Interaction.Behaviors>
                     <Helpers:PasswordExpositionBehavior Password="{Binding Password}"/>
                 </i:Interaction.Behaviors>
             </PasswordBox>
-        </StackPanel>
 
-        <StackPanel Margin="0, 5">
-            <TextBlock Text="Repeat Password:"/>
+            <TextBlock Text="Repeat Password" Style="{StaticResource TextBlock.LoginRegistrationTextBoxLabel}"/>
             <PasswordBox>
                 <i:Interaction.Behaviors>
                     <Helpers:PasswordExpositionBehavior Password="{Binding RepeatPassword}"/>
                 </i:Interaction.Behaviors>
             </PasswordBox>
-        </StackPanel>
 
-        <Button Content="Register" Margin="0, 25, 0, 0"
-                Caliburn:Message.Attach="Register"/>
-        <Button Content="Go to Login" Caliburn:Message.Attach="SwitchToLogin"/>
-    </StackPanel>
+            <Button Content="Register"
+                    Style="{StaticResource Button.LoginRegistrationAction}"
+                    Caliburn:Message.Attach="Register"/>
+
+            <Button Content="Already have an account?"
+                    Style="{StaticResource Button.LinkSwitchLoginRegistrationView}"
+                    Caliburn:Message.Attach="SwitchToLogin"/>
+        </StackPanel>
+    </Border>
 </UserControl>
