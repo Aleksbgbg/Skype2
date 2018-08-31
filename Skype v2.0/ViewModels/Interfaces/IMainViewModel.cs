@@ -6,6 +6,8 @@
     {
         ILoginViewModel LoginViewModel { get; }
 
+        IRegisterViewModel RegisterViewModel { get; }
+
         IChatViewModel ChatViewModel { get; }
     }
 }

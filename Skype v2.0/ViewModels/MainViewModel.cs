@@ -1,45 +1,29 @@
 ﻿namespace Skype2.ViewModels
 {
+    using System.Collections.Generic;
     using Caliburn.Micro;
 
+    using Skype2.Services.Interfaces;
     using Skype2.ViewModels.Interfaces;
 
-    internal sealed class MainViewModel : Conductor<IViewModelBase>, IMainViewModel
+    internal sealed class MainViewModel : Conductor<IViewModelBase>.Collection.OneActive, IMainViewModel
     {
-        public MainViewModel(ILoginViewModel loginViewModel, IRegisterViewModel registerViewModel, IChatViewModel chatViewModel)
+        private readonly IRestService _restService;
+
+        public MainViewModel(IRestService restService, ILoginViewModel loginViewModel, IRegisterViewModel registerViewModel, IChatViewModel chatViewModel)
         {
+            _restService = restService;
+
             LoginViewModel = loginViewModel;
             RegisterViewModel = registerViewModel;
-            ChatViewModel = chatViewModel;;
+            ChatViewModel = chatViewModel;
+
+            Items.Add(loginViewModel);
+            Items.Add(registerViewModel);
+            Items.Add(chatViewModel);
 
             ScreenExtensions.TryActivate(this);
 
-            ActivateItem(LoginViewModel);
-
-            LoginViewModel.LoggedIn += LoggedIn;
-            RegisterViewModel.Registered += Registered;
-
-            LoginViewModel.SwitchToRegisterRequested += SwitchToRegister;
-            RegisterViewModel.SwitchToLoginRequested += SwitchToLogin;
-        }
-
-        private void LoggedIn(object sender, System.EventArgs e)
-        {
-            OnLoggedIn();
-        }
-
-        private void Registered(object sender, System.EventArgs e)
-        {
-            OnLoggedIn();
-        }
-
-        private void SwitchToRegister(object sender, System.EventArgs e)
-        {
-            ActivateItem(RegisterViewModel);
-        }
-
-        private void SwitchToLogin(object sender, System.EventArgs e)
-        {
             ActivateItem(LoginViewModel);
         }
 
@@ -49,15 +33,19 @@
 
         public IChatViewModel ChatViewModel { get; }
 
-        private void OnLoggedIn()
+        protected override IViewModelBase DetermineNextItemToActivate(IList<IViewModelBase> list, int lastIndex)
         {
-            ActivateItem(ChatViewModel);
+            if (_restService.LoggedInUser == null)
+            {
+                if (list[lastIndex] == LoginViewModel)
+                {
+                    return RegisterViewModel;
+                }
 
-            LoginViewModel.LoggedIn -= LoggedIn;
-            RegisterViewModel.Registered -= Registered;
+                return LoginViewModel;
+            }
 
-            LoginViewModel.SwitchToRegisterRequested -= SwitchToRegister;
-            RegisterViewModel.SwitchToLoginRequested -= SwitchToLogin;
+            return ChatViewModel;
         }
     }
 }
