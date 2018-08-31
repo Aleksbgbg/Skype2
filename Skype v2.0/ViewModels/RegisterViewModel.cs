@@ -19,10 +19,6 @@
             _restService = restService;
         }
 
-        public event EventHandler Registered;
-
-        public event EventHandler SwitchToLoginRequested;
-
         private string _username;
         public string Username
         {
@@ -74,12 +70,12 @@
         {
             yield return _restService.Register(Username, Password).AsResult();
 
-            Registered?.Invoke(this, EventArgs.Empty);
+            TryClose();
         }
 
         public void SwitchToLogin()
         {
-            SwitchToLoginRequested?.Invoke(this, EventArgs.Empty);
+            TryClose();
         }
 
         private static string Get(SecureString password)
