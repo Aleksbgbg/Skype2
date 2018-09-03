@@ -39,18 +39,17 @@
         }
 
         [HttpPost("register")]
-        [Consumes("application/x-www-form-urlencoded")]
-        public async Task<IActionResult> Register([FromForm] string username, [FromForm] string password)
+        public async Task<IActionResult> Register([FromBody] UserCredentials userCredentials)
         {
             await _databaseContext.Users.AddAsync(new User
             {
                 CreatedAt = DateTime.Now,
-                Name = username,
-                Password = Encoding.UTF8.GetString(Convert.FromBase64String(password))
+                Name = userCredentials.Username,
+                Password = userCredentials.Password
             });
             await _databaseContext.SaveChangesAsync();
 
-            if (_authService.Authorize(username, password, out string token))
+            if (_authService.Authorize(userCredentials.Username, userCredentials.Password, out string token))
             {
                 return Ok(token);
             }
