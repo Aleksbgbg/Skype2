@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\MessageTransmission.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Snowflake.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\UserCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UserImage.cs" />
   </ItemGroup>
 </Project>
