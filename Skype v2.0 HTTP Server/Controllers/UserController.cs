@@ -7,11 +7,13 @@
     using HttpServer.Models;
     using HttpServer.Services.Interfaces;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     using Shared.Models;
 
+    [Authorize]
     [ApiController]
     [Route("[Controller]")]
     public class UserController : ControllerBase
@@ -26,6 +28,7 @@
             _databaseContext = databaseContext;
         }
 
+        [AllowAnonymous]
         [HttpGet("{userId}/get/image")]
         public ActionResult<IActionResult> GetImage(long userId)
         {
