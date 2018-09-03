@@ -32,28 +32,12 @@
 
         public async Task Login(string username, SecureString password)
         {
-            UserCredentials credentials = new UserCredentials(username, HashPassword(password));
-
-            string credentialsSerialised = JsonConvert.SerializeObject(credentials);
-
-            HttpResponseMessage response = await _httpClient.PostAsync("session/login", new StringContent(credentialsSerialised, Encoding.UTF8, "application/json"));
-
-            string responseContent = await response.Content.ReadAsStringAsync();
-
-            await Login(username, responseContent);
+            await PerformSessionAction("login", username, password);
         }
 
         public async Task Register(string username, SecureString password)
         {
-            HttpResponseMessage response = await _httpClient.PostAsync("session/register", new FormUrlEncodedContent(new[]
-            {
-                    new KeyValuePair<string, string>("username", username),
-                    new KeyValuePair<string, string>("password", HashPassword(password))
-            }));
-
-            string responseContent = await response.Content.ReadAsStringAsync();
-
-            await Login(username, responseContent);
+            await PerformSessionAction("register", username, password);
         }
 
         public async Task Logout()
@@ -75,11 +59,17 @@
             return JsonConvert.DeserializeObject<T>(content);
         }
 
-        private async Task Login(string username, string token)
+        private async Task PerformSessionAction(string actionPath, string username, SecureString password)
         {
-            AuthToken = token;
+            UserCredentials credentials = new UserCredentials(username, HashPassword(password));
 
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            string credentialsSerialised = JsonConvert.SerializeObject(credentials);
+
+            HttpResponseMessage response = await _httpClient.PostAsync($"session/{actionPath}", new StringContent(credentialsSerialised, Encoding.UTF8, "application/json"));
+
+            AuthToken = await response.Content.ReadAsStringAsync();
+
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {AuthToken}");
 
             LoggedInUser = await Get<User>($"user/get/by/name/{username}");
         }
