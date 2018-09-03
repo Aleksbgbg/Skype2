@@ -1,49 +1,53 @@
 ﻿namespace HttpServer.Services
 {
     using System;
+    using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
-    using System.Security.Cryptography;
+    using System.Security.Claims;
     using System.Text;
 
     using HttpServer.Database;
     using HttpServer.Services.Interfaces;
 
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.IdentityModel.Tokens;
+
+    using Shared.Config;
+
     public class AuthService : IAuthService
     {
-        private const int TokenLengthBytes = 32;
-
-        private readonly RNGCryptoServiceProvider _cryptoServiceProvider = new RNGCryptoServiceProvider();
-
         private readonly Skype2Context _databaseContext;
 
         private readonly IAuthorizationCache _authorizationCache;
 
-        public AuthService(Skype2Context databaseContext, IAuthorizationCache authorizationCache)
+        private readonly IConfiguration _configuration;
+
+        public AuthService(Skype2Context databaseContext, IAuthorizationCache authorizationCache, IConfiguration configuration)
         {
             _databaseContext = databaseContext;
             _authorizationCache = authorizationCache;
+            _configuration = configuration;
         }
 
         public bool Authorize(string username, string password, out string token)
         {
-            bool passwordIsRight = _databaseContext.Users.Single(user => user.Name == username).Password == Encoding.UTF8.GetString(Convert.FromBase64String(password));
-
-            if (passwordIsRight)
+            if (_databaseContext.Users.Single(user => user.Name == username).Password == password)
             {
-                byte[] tokenBytes = new byte[TokenLengthBytes];
+                Claim[] claims = { new Claim(ClaimTypes.Name, username) };
 
-                _cryptoServiceProvider.GetBytes(tokenBytes);
+                SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
+                SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-                token = BitConverter.ToString(tokenBytes).Replace("-", "");
+                string selfAddress = $"{Constants.ServerIp}:{Constants.TcpPort}";
 
-                _authorizationCache.Add(token);
-            }
-            else
-            {
-                token = null;
+                JwtSecurityToken jwtToken = new JwtSecurityToken(selfAddress, selfAddress, claims, expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
+
+                token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+                return true;
             }
 
-            return passwordIsRight;
+            token = null;
+            return false;
         }
 
         public bool CheckAuthorized(string token)
@@ -58,7 +62,7 @@
 
         private string ExtractToken(string tokenAuthorization)
         {
-            if (!tokenAuthorization.StartsWith("Token", StringComparison.InvariantCultureIgnoreCase))
+            if (!tokenAuthorization.StartsWith("Bearer", StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new InvalidOperationException("Cannot extract token from non-token authorization parameter.");
             }
