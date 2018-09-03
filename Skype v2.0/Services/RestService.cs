@@ -32,15 +32,11 @@
 
         public async Task Login(string username, SecureString password)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "session/login")
-            {
-                Headers =
-                {
-                    { "Authorization", $"Basic {username} {HashPassword(password)}" }
-                }
-            };
+            UserCredentials credentials = new UserCredentials(username, HashPassword(password));
 
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            string credentialsSerialised = JsonConvert.SerializeObject(credentials);
+
+            HttpResponseMessage response = await _httpClient.PostAsync("session/login", new StringContent(credentialsSerialised, Encoding.UTF8, "application/json"));
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -83,7 +79,7 @@
         {
             AuthToken = token;
 
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Token {token}");
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
             LoggedInUser = await Get<User>($"user/get/by/name/{username}");
         }
@@ -96,7 +92,7 @@
 
             string hashString = BitConverter.ToString(hashBytes).Replace("-", "");
 
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(hashString));
+            return hashString;
         }
     }
 }
