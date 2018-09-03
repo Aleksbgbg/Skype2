@@ -6,10 +6,12 @@
 
     using HttpServer.Database;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using Shared.Models;
 
+    [Authorize]
     [ApiController]
     [Route("[Controller]")]
     public class MessagesController : ControllerBase
