@@ -3,6 +3,7 @@
     using System.IO;
 
     using HttpServer.Database;
+    using HttpServer.Extensions;
     using HttpServer.Services;
     using HttpServer.Services.Interfaces;
 
@@ -15,17 +16,19 @@
 
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddJwtAuthentication(_configuration);
 
             services.AddDbContext<Skype2Context>(options => options.UseNpgsql(File.ReadAllText("Connection String.txt")));
 
@@ -43,6 +46,7 @@
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
