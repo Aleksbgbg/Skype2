@@ -1,16 +1,24 @@
 ﻿namespace HttpServer.Controllers
 {
     using System;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Linq;
+    using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
 
     using HttpServer.Database;
     using HttpServer.Services.Interfaces;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.IdentityModel.Tokens;
 
+    using Shared.Config;
     using Shared.Models;
 
+    [AllowAnonymous]
     [ApiController]
     [Route("[Controller]")]
     public class SessionController : ControllerBase
@@ -19,28 +27,35 @@
 
         private readonly Skype2Context _databaseContext;
 
-        public SessionController(IAuthService authService, Skype2Context databaseContext)
+        private readonly IConfiguration _configuration;
+
+        public SessionController(IAuthService authService, Skype2Context databaseContext, IConfiguration configuration)
         {
             _authService = authService;
             _databaseContext = databaseContext;
+            _configuration = configuration;
         }
 
-        [HttpGet("login")]
-        public IActionResult Login([FromHeader] string authorization)
+        [HttpPost("login")]
+        public IActionResult RequestToken([FromBody] UserCredentials userCredentials)
         {
-            if (!authorization.StartsWith("Basic", StringComparison.InvariantCultureIgnoreCase))
+            User targetUser = _databaseContext.Users.Single(user => user.Name == userCredentials.Username);
+
+            if (targetUser.Password == userCredentials.Password)
             {
-                return BadRequest();
+                Claim[] claims = { new Claim(ClaimTypes.Name, userCredentials.Username) };
+
+                SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
+                SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+                string selfAddress = $"{Constants.ServerIp}:{Constants.TcpPort}";
+
+                JwtSecurityToken token = new JwtSecurityToken(selfAddress, selfAddress, claims, expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
+
+                return Ok(new JwtSecurityTokenHandler().WriteToken(token));
             }
 
-            string[] authParameters = authorization.Split(' ', 3);
-
-            if (_authService.Authorize(authParameters[1], authParameters[2], out string token))
-            {
-                return Ok(token);
-            }
-
-            return Unauthorized();
+            return BadRequest("Invalid credentials.");
         }
 
         [HttpPost("register")]
@@ -63,6 +78,7 @@
             return Unauthorized();
         }
 
+        [Authorize]
         [HttpGet("logout")]
         public IActionResult Logout([FromHeader] string authorization)
         {
