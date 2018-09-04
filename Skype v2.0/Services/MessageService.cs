@@ -31,7 +31,7 @@
 
         public void SendMessage(string content)
         {
-            _tcpClient.Write(JsonConvert.SerializeObject(new MessageTransmission($"Token {_restService.AuthToken}",
+            _tcpClient.Write(JsonConvert.SerializeObject(new MessageTransmission(_restService.AuthorizationHeader,
                                                                                  new Message
                                                                                  {
                                                                                      Content = content,

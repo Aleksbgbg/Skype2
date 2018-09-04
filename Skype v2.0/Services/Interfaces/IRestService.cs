@@ -7,7 +7,7 @@
 
     internal interface IRestService
     {
-        string AuthToken { get; }
+        string AuthorizationHeader { get; }
 
         User LoggedInUser { get; }
 

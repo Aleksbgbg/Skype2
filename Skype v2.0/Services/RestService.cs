@@ -20,7 +20,7 @@
     {
         private readonly HttpClient _httpClient = new HttpClient();
 
-        public string AuthToken { get; private set; }
+        public string AuthorizationHeader { get; private set; }
 
         public RestService()
         {
@@ -67,9 +67,11 @@
 
             HttpResponseMessage response = await _httpClient.PostAsync($"session/{actionPath}", new StringContent(credentialsSerialised, Encoding.UTF8, "application/json"));
 
-            AuthToken = await response.Content.ReadAsStringAsync();
+            string responseContent = await response.Content.ReadAsStringAsync();
 
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {AuthToken}");
+            AuthorizationHeader = $"Bearer {responseContent}";
+
+            _httpClient.DefaultRequestHeaders.Add("Authorization", AuthorizationHeader);
 
             LoggedInUser = await Get<User>($"user/get/by/name/{username}");
         }
