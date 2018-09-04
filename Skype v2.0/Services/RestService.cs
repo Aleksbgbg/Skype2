@@ -61,7 +61,7 @@
 
         private async Task PerformSessionAction(string actionPath, string username, SecureString password)
         {
-            UserCredentials credentials = new UserCredentials(username, HashPassword(password));
+            UserCredentials credentials = new UserCredentials(username, Marshal.PtrToStringBSTR(Marshal.SecureStringToBSTR(password)));
 
             string credentialsSerialised = JsonConvert.SerializeObject(credentials);
 
@@ -72,17 +72,6 @@
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {AuthToken}");
 
             LoggedInUser = await Get<User>($"user/get/by/name/{username}");
-        }
-
-        private static string HashPassword(SecureString password)
-        {
-            SHA256CryptoServiceProvider hasher = new SHA256CryptoServiceProvider();
-
-            byte[] hashBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(Marshal.PtrToStringBSTR(Marshal.SecureStringToBSTR(password))));
-
-            string hashString = BitConverter.ToString(hashBytes).Replace("-", "");
-
-            return hashString;
         }
     }
 }
