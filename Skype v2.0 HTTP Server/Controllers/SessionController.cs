@@ -1,7 +1,6 @@
 ﻿namespace HttpServer.Controllers
 {
     using System;
-    using System.Text;
     using System.Threading.Tasks;
 
     using HttpServer.Database;
@@ -21,10 +20,13 @@
 
         private readonly Skype2Context _databaseContext;
 
-        public SessionController(IAuthService authService, Skype2Context databaseContext)
+        private readonly IHashService _hashService;
+
+        public SessionController(IAuthService authService, Skype2Context databaseContext, IHashService hashService)
         {
             _authService = authService;
             _databaseContext = databaseContext;
+            _hashService = hashService;
         }
 
         [HttpPost("login")]
@@ -41,11 +43,14 @@
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserCredentials userCredentials)
         {
+            byte[] salt = _hashService.GenerateSalt();
+
             await _databaseContext.Users.AddAsync(new User
             {
                 CreatedAt = DateTime.Now,
                 Name = userCredentials.Username,
-                Password = userCredentials.Password
+                Password = _hashService.HashPassword(userCredentials.Password, salt),
+                Salt = Convert.ToBase64String(salt)
             });
             await _databaseContext.SaveChangesAsync();
 
