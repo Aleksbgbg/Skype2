@@ -43,6 +43,19 @@
             return _databaseContext.Users.Single(user => user.Name == name);
         }
 
+        [HttpGet("{userId}")]
+        public ActionResult<User> GetUser(long userId)
+        {
+            User targetUser = _databaseContext.Users.SingleOrDefault(user => user.Id == userId);
+
+            if (targetUser == null)
+            {
+                return BadRequest("No such user exists.");
+            }
+
+            return targetUser;
+        }
+
         [HttpPost("{userId}/post/image")]
         public async Task PostImage(long userId, IFormFile image)
         {
