@@ -22,7 +22,7 @@
         {
             if (!_userCache.TryGetValue(message.SenderId, out User user))
             {
-                user = await _restService.Get<User>($"users/get/{message.SenderId}");
+                user = await _restService.Get<User>($"user/{message.SenderId}");
                 _userCache.Add(message.SenderId, user);
             }
 
