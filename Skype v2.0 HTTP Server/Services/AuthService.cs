@@ -13,6 +13,7 @@
     using Microsoft.IdentityModel.Tokens;
 
     using Shared.Config;
+    using Shared.Models;
 
     public class AuthService : IAuthService
     {
@@ -22,16 +23,23 @@
 
         private readonly IConfiguration _configuration;
 
-        public AuthService(Skype2Context databaseContext, IAuthorizationCache authorizationCache, IConfiguration configuration)
+        private readonly IHashService _hashService;
+
+        public AuthService(Skype2Context databaseContext, IAuthorizationCache authorizationCache, IConfiguration configuration, IHashService hashService)
         {
             _databaseContext = databaseContext;
             _authorizationCache = authorizationCache;
             _configuration = configuration;
+            _hashService = hashService;
         }
 
         public bool Authorize(string username, string password, out string token)
         {
-            if (_databaseContext.Users.Single(user => user.Name == username).Password == password)
+            User targetUser = _databaseContext.Users.Single(user => user.Name == username);
+
+            string hashedPassword = _hashService.HashPassword(password, Convert.FromBase64String(targetUser.Salt));
+
+            if (hashedPassword == targetUser.Password)
             {
                 Claim[] claims = { new Claim(ClaimTypes.Name, username) };
 
