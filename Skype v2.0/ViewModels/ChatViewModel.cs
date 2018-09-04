@@ -29,7 +29,13 @@
 
         protected override void OnActivate()
         {
-            Task.Run(LoadMessages);
+            Task.Run(async () =>
+            {
+                foreach (Message message in await _restService.GetMessages())
+                {
+                    AddMessage(message);
+                }
+            });
 
             _messageService.MessageReceived += (sender, e) => AddMessage(e.Message);
         }
@@ -56,14 +62,6 @@
             {
                 _messageService.SendMessage(Message.TrimEnd());
                 Message = string.Empty;
-            }
-        }
-
-        private async Task LoadMessages()
-        {
-            foreach (Message message in await _restService.GetMessages())
-            {
-                AddMessage(message);
             }
         }
 
