@@ -36,6 +36,7 @@
             _container.Singleton<IWindowManager, WindowManager>();
 
             _container.Singleton<IMessageService, MessageService>();
+            _container.Singleton<IMessageManagerService, MessageManagerService>();
             _container.Singleton<IRestService, RestService>();
 
             // Register ViewModels

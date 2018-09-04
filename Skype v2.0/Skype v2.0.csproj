@@ -133,8 +133,10 @@
     <Compile Include="Factories\MessageFactory.cs" />
     <Compile Include="Helpers\AutoScrollBehavior.cs" />
     <Compile Include="Helpers\PasswordExpositionBehavior.cs" />
+    <Compile Include="Services\Interfaces\IMessageManagerService.cs" />
     <Compile Include="Services\Interfaces\IMessageService.cs" />
     <Compile Include="Services\Interfaces\IRestService.cs" />
+    <Compile Include="Services\MessageManagerService.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Services\RestService.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
