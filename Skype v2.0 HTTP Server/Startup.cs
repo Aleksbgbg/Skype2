@@ -34,6 +34,7 @@
 
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IHashService, HashService>();
 
             services.AddSingleton<IAuthorizationCache, AuthorizationCache>();
         }
