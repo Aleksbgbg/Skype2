@@ -7,5 +7,7 @@
         Message Message { get; }
 
         void Initialize(Message message);
+
+        void LoadSender();
     }
 }

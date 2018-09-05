@@ -1,7 +1,5 @@
 ﻿namespace Skype2.ViewModels
 {
-    using System.Threading.Tasks;
-
     using Caliburn.Micro;
 
     using Skype2.Factories.Interfaces;
@@ -16,12 +14,10 @@
 
         private readonly IRestService _sessionService;
 
-        public MessageClusterViewModel(IMessageFactory messageFactory, IRestService sessionService, IMessageManagerService messageManagerService)
+        public MessageClusterViewModel(IMessageFactory messageFactory, IRestService sessionService)
         {
             _messageFactory = messageFactory;
             _sessionService = sessionService;
-
-            Task.Run(async () => await messageManagerService.LoadSender(RootMessage.Message));
         }
 
         public IMessageViewModel RootMessage { get; private set; }
@@ -33,6 +29,8 @@
         public void Initialize(Message rootMessage)
         {
             RootMessage = _messageFactory.MakeMessageViewModel(rootMessage);
+            RootMessage.LoadSender();
+
             AllMessages.Add(RootMessage);
 
             SelfIsSender = _sessionService.LoggedInUser.Id == rootMessage.SenderId;
