@@ -18,14 +18,17 @@
     [Route("[Controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IImageService _imageService;
-
         private readonly Skype2Context _databaseContext;
 
-        public UserController(IImageService imageService, Skype2Context databaseContext)
+        private readonly IAuthService _authService;
+
+        private readonly IImageService _imageService;
+
+        public UserController(Skype2Context databaseContext, IAuthService authService, IImageService imageService)
         {
-            _imageService = imageService;
             _databaseContext = databaseContext;
+            _authService = authService;
+            _imageService = imageService;
         }
 
         [AllowAnonymous]
@@ -57,9 +60,16 @@
         }
 
         [HttpPost("{userId}/post/image")]
-        public async Task PostImage(long userId, IFormFile image)
+        public async Task<ActionResult> PostImage(long userId, IFormFile image)
         {
+            if (!await _authService.CanAccess(User, userId))
+            {
+                return Unauthorized();
+            }
+
             await _imageService.UploadNewImageForUser(userId, image);
+
+            return Ok();
         }
     }
 }
