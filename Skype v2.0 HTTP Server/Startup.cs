@@ -2,11 +2,15 @@
 {
     using System.IO;
 
+    using HttpServer.Authorization;
+    using HttpServer.Authorization.Handlers;
+    using HttpServer.Authorization.Requirements;
     using HttpServer.Database;
     using HttpServer.Extensions;
     using HttpServer.Services;
     using HttpServer.Services.Interfaces;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -29,6 +33,7 @@
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddJwtAuthentication(_configuration);
+            services.AddAuthorization(options => options.AddPolicy(Policy.ActiveUser, policy => policy.Requirements.Add(new ActiveUserRequirement())));
 
             services.AddDbContext<Skype2Context>(options => options.UseNpgsql(File.ReadAllText("Connection String.txt")));
 
@@ -37,6 +42,7 @@
             services.AddScoped<IHashService, HashService>();
 
             services.AddSingleton<IAuthorizationCache, AuthorizationCache>();
+            services.AddSingleton<IAuthorizationHandler, ActiveUserHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
