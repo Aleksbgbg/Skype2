@@ -32,9 +32,9 @@
         [HttpPost("login")]
         public IActionResult RequestToken([FromBody] UserCredentials userCredentials)
         {
-            if (_authService.Authorize(userCredentials.Username, userCredentials.Password, out string token))
+            if (_authService.Authorize(userCredentials.Username, userCredentials.Password, out ClientSession clientSession))
             {
-                return Ok(token);
+                return Ok(clientSession);
             }
 
             return BadRequest("Invalid credentials.");
@@ -54,19 +54,32 @@
             });
             await _databaseContext.SaveChangesAsync();
 
-            if (_authService.Authorize(userCredentials.Username, userCredentials.Password, out string token))
+            if (_authService.Authorize(userCredentials.Username, userCredentials.Password, out ClientSession clientSession))
             {
-                return Ok(token);
+                return Ok(clientSession);
             }
 
             return Unauthorized();
         }
 
+        [HttpPost("refresh")]
+        public ActionResult<ClientSession> RefreshClientSession([FromBody] ClientSession session)
+        {
+            ClientSession clientSession = _authService.RefreshToken(session);
+
+            if (clientSession == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(clientSession);
+        }
+
         [Authorize]
         [HttpGet("logout")]
-        public IActionResult Logout([FromHeader] string authorization)
+        public IActionResult Logout()
         {
-            _authService.DeAuthorize(authorization);
+            _authService.Invalidate(User.Identity.Name);
 
             return Ok();
         }
