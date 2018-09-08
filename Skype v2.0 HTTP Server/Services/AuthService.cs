@@ -1,6 +1,7 @@
 ﻿namespace HttpServer.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using System.Security.Claims;
@@ -39,7 +40,7 @@
             _authorizationService = authorizationService;
         }
 
-        public bool Authorize(string username, string password, out string token)
+        public bool Authorize(string username, string password, out ClientSession token)
         {
             User targetUser = _databaseContext.Users.Single(user => user.Name == username);
 
@@ -49,12 +50,7 @@
             {
                 Claim[] claims = { new Claim(ClaimTypes.Name, username) };
 
-                SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
-                SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-                JwtSecurityToken jwtToken = new JwtSecurityToken(Constants.HttpServerAddress, Constants.HttpServerAddress, claims, expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
-
-                token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+                token = GenerateSession(username, claims);
                 return true;
             }
 
@@ -62,14 +58,52 @@
             return false;
         }
 
-        public bool CheckAuthorized(string token)
+        public ClientSession RefreshToken(ClientSession oldSession)
         {
-            return _authorizationCache.Contains(ExtractToken(token));
+            ClaimsPrincipal oldTokenClaimsPrincipal;
+
+            {
+                TokenValidationParameters tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"])),
+                    ValidateLifetime = false,
+                    ValidAudience = Constants.HttpServerAddress,
+                    ValidIssuer = Constants.HttpServerAddress
+                };
+
+                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+                oldTokenClaimsPrincipal = tokenHandler.ValidateToken(oldSession.Token, tokenValidationParameters, out SecurityToken securityToken);
+
+                if (securityToken == null)
+                {
+                    return null;
+                }
+            }
+
+            string username = oldTokenClaimsPrincipal.Identity.Name;
+
+            if (!_authorizationCache.Contains(username))
+            {
+                return null;
+            }
+
+            Session userSession = _authorizationCache.GetSession(username);
+
+            if (DateTime.Now >= userSession.ExpiresAt || userSession.RefreshToken != oldSession.Session.RefreshToken)
+            {
+                return null;
+            }
+
+            return GenerateSession(username, oldTokenClaimsPrincipal.Claims);
         }
 
-        public void DeAuthorize(string token)
+        public void Invalidate(string username)
         {
-            _authorizationCache.Remove(ExtractToken(token));
+            _authorizationCache.Remove(username);
         }
 
         public async Task<bool> CanAccess(ClaimsPrincipal sessionUser, long userId)
@@ -81,14 +115,27 @@
             return result.Succeeded;
         }
 
-        private string ExtractToken(string tokenAuthorization)
+        private ClientSession GenerateSession(string username, IEnumerable<Claim> claims)
         {
-            if (!tokenAuthorization.StartsWith("Bearer", StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new InvalidOperationException("Cannot extract token from non-token authorization parameter.");
-            }
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
+            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            return tokenAuthorization.Split(' ', 2)[1];
+            JwtSecurityToken jwtToken = new JwtSecurityToken(Constants.HttpServerAddress, Constants.HttpServerAddress, claims, expires: DateTime.Now.AddMinutes(0.5), signingCredentials: credentials);
+
+            ClientSession clientSesh = new ClientSession
+            {
+                ExpiresAt = DateTime.Now.AddMinutes(5.0),
+                Session = new Session
+                {
+                    ExpiresAt = DateTime.Now.AddDays(1),
+                    RefreshToken = Convert.ToBase64String(_hashService.GenerateSalt(256))
+                },
+                Token = new JwtSecurityTokenHandler().WriteToken(jwtToken)
+            };
+
+            _authorizationCache.Add(username, clientSesh.Session);
+
+            return clientSesh;
         }
     }
 }
