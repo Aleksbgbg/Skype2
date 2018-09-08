@@ -1,13 +1,14 @@
 ﻿namespace Skype2.Services
 {
     using System;
-    using System.Collections.Generic;
+    using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Security;
-    using System.Security.Cryptography;
     using System.Text;
+    using System.Timers;
     using System.Threading.Tasks;
 
     using Newtonsoft.Json;
@@ -21,12 +22,18 @@
     {
         private readonly HttpClient _httpClient = new HttpClient();
 
+        private readonly Timer _sessionRefreshTimer = new Timer();
+
+        private ClientSession _session;
+
         public string AuthorizationHeader { get; private set; }
 
         public RestService()
         {
             _httpClient.BaseAddress = new Uri(Constants.HttpServerAddress);
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+
+            _sessionRefreshTimer.Elapsed += async (sender, e) => await RefreshToken();
         }
 
         public User LoggedInUser { get; private set; }
@@ -55,9 +62,7 @@
         {
             HttpResponseMessage response = await _httpClient.GetAsync(path);
 
-            string content = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<T>(content);
+            return await Read<T>(response);
         }
 
         private async Task PerformSessionAction(string actionPath, string username, SecureString password)
@@ -88,13 +93,46 @@
                 }
             }
 
-            string responseContent = await response.Content.ReadAsStringAsync();
-
-            AuthorizationHeader = $"Bearer {responseContent}";
-
-            _httpClient.DefaultRequestHeaders.Add("Authorization", AuthorizationHeader);
+            ImplementSession(await Read<ClientSession>(response));
 
             LoggedInUser = await Get<User>($"user/get/by/name/{username}");
+        }
+
+        private async Task RefreshToken()
+        {
+            _httpClient.DefaultRequestHeaders.Remove("Authorization");
+
+            HttpResponseMessage response = await _httpClient.PostAsync("session/refresh", new StringContent(JsonConvert.SerializeObject(_session), Encoding.UTF8, "application/json"));
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                // Reset user to login screen in the future
+                _session = null;
+                return;
+            }
+
+            ImplementSession(await Read<ClientSession>(response));
+        }
+
+        private void ImplementSession(ClientSession session)
+        {
+            _sessionRefreshTimer.Stop();
+
+            _session = session;
+
+            _sessionRefreshTimer.Interval = (session.ExpiresAt - DateTime.Now).TotalMilliseconds;
+            _sessionRefreshTimer.Start();
+
+            AuthorizationHeader = $"Bearer {_session.Token}";
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _session.Token);
+        }
+
+        private static async Task<T> Read<T>(HttpResponseMessage response)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(content);
         }
     }
 }
