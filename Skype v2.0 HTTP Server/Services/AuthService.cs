@@ -52,9 +52,7 @@
                 SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
                 SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-                string selfAddress = $"{Constants.ServerIp}:{Constants.TcpPort}";
-
-                JwtSecurityToken jwtToken = new JwtSecurityToken(selfAddress, selfAddress, claims, expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
+                JwtSecurityToken jwtToken = new JwtSecurityToken(Constants.HttpServerAddress, Constants.HttpServerAddress, claims, expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
 
                 token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
                 return true;

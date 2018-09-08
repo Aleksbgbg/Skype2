@@ -13,8 +13,6 @@
     {
         internal static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            string selfAddress = $"{Constants.ServerIp}:{Constants.TcpPort}";
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -22,8 +20,8 @@
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = selfAddress,
-                        ValidAudience = selfAddress,
+                        ValidIssuer = Constants.HttpServerAddress,
+                        ValidAudience = Constants.HttpServerAddress,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecurityKey"]))
                     });
         }

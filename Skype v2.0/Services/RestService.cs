@@ -25,7 +25,7 @@
 
         public RestService()
         {
-            _httpClient.BaseAddress = new Uri($"http://{Constants.ServerIp}:{Constants.HttpPort}/");
+            _httpClient.BaseAddress = new Uri(Constants.HttpServerAddress);
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
         }
 

@@ -25,7 +25,7 @@
                 return cachedImage;
             }
 
-            ImageSource imageSource = new BitmapImage(new Uri($"http://{Constants.ServerIp}:{Constants.HttpPort}/user/{userId}/get/image"));
+            ImageSource imageSource = new BitmapImage(new Uri($"{Constants.HttpServerAddress}/user/{userId}/get/image"));
 
             _imageCache[userId] = imageSource;
 

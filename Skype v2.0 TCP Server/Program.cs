@@ -32,12 +32,12 @@
                 ByteArrayContent byteArrayContent = new ByteArrayContent(Encoding.UTF8.GetBytes(messageString));
                 byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"http://{Constants.ServerIp}:{Constants.HttpPort}/messages/post")
+                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"{Constants.HttpServerAddress}/messages/post")
                 {
                         Content = byteArrayContent,
                         Headers =
                         {
-                                { "authorization", messageTransmission.Authorization }
+                                { "Authorization", messageTransmission.Authorization }
                         }
                 };
 
