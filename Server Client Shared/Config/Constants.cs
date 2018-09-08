@@ -10,6 +10,6 @@
 
         public const int HttpPort = 3002;
 
-        public static readonly string HttpServerAddress = $"http://81.107.155.88:3002";
+        public const string HttpServerAddress = "http://81.107.155.88:3002";
     }
 }
