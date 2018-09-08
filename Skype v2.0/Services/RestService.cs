@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Security;
     using System.Security.Cryptography;
@@ -61,11 +62,31 @@
 
         private async Task PerformSessionAction(string actionPath, string username, SecureString password)
         {
-            UserCredentials credentials = new UserCredentials(username, Marshal.PtrToStringBSTR(Marshal.SecureStringToBSTR(password)));
+            HttpResponseMessage response;
 
-            string credentialsSerialised = JsonConvert.SerializeObject(credentials);
+            {
+                IntPtr passwordPointer = IntPtr.Zero;
 
-            HttpResponseMessage response = await _httpClient.PostAsync($"session/{actionPath}", new StringContent(credentialsSerialised, Encoding.UTF8, "application/json"));
+                RuntimeHelpers.PrepareConstrainedRegions();
+
+                try
+                {
+                    passwordPointer = Marshal.SecureStringToBSTR(password);
+
+                    UserCredentials credentials = new UserCredentials(username, Marshal.PtrToStringBSTR(passwordPointer));
+
+                    string credentialsSerialised = JsonConvert.SerializeObject(credentials);
+
+                    response = await _httpClient.PostAsync($"session/{actionPath}", new StringContent(credentialsSerialised, Encoding.UTF8, "application/json"));
+                }
+                finally
+                {
+                    if (passwordPointer != IntPtr.Zero)
+                    {
+                        Marshal.ZeroFreeBSTR(passwordPointer);
+                    }
+                }
+            }
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
