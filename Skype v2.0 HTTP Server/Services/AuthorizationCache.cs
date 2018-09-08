@@ -4,23 +4,30 @@
 
     using HttpServer.Services.Interfaces;
 
+    using Shared.Models;
+
     public class AuthorizationCache : IAuthorizationCache
     {
-        private readonly List<string> _cache = new List<string>();
+        private readonly Dictionary<string, Session> _userSessions = new Dictionary<string, Session>();
 
-        public void Add(string token)
+        public void Add(string username, Session session)
         {
-            _cache.Add(token);
+            _userSessions[username] = session;
         }
 
-        public void Remove(string token)
+        public void Remove(string username)
         {
-            _cache.Remove(token);
+            _userSessions.Remove(username);
         }
 
-        public bool Contains(string token)
+        public bool Contains(string username)
         {
-            return _cache.Contains(token);
+            return _userSessions.ContainsKey(username);
+        }
+
+        public Session GetSession(string username)
+        {
+            return _userSessions[username];
         }
     }
 }

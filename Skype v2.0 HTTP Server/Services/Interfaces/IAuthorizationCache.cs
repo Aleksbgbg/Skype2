@@ -1,11 +1,15 @@
 ﻿namespace HttpServer.Services.Interfaces
 {
+    using Shared.Models;
+
     public interface IAuthorizationCache
     {
-        void Add(string token);
+        void Add(string username, Session session);
 
-        void Remove(string token);
+        void Remove(string username);
 
-        bool Contains(string token);
+        bool Contains(string username);
+
+        Session GetSession(string username);
     }
 }
